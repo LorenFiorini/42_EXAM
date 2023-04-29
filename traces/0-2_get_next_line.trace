@@ -1,0 +1,15 @@
+get_next_line/get_next_line.c:19:18: error: incompatible integer to pointer conversion assigning to 'char *' from 'char'; take the address with & [-Werror,-Wint-conversion]
+                        line[len + j] = c[j];
+                                      ^ ~~~~
+                                        &
+get_next_line/get_next_line.c:35:10: error: incompatible pointer to integer conversion assigning to 'char' from 'char *'; dereference with * [-Werror,-Wint-conversion]
+                ans[i] = line[i];
+                       ^ ~~~~~~~
+                         *
+2 errors generated.
+
+(null)\n
+\n
+-------
+\n
+-------
