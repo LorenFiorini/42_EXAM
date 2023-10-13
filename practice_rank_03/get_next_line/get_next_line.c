@@ -1,65 +1,69 @@
-//# include "get_next_line.h"
-# include <unistd.h>
-# include <stdlib.h>
-
-
-/*
 # include <stdio.h>
-# include <fcntl.h>
-# include <sys/types.h>
-//# define BUFFER_SIZE 5
-char *get_next_line(int fd);
+# include <stdlib.h>
+# include <unistd.h>
 
-int main(int argc, char **argv)
-{
-	int fd;
-	char *line;
 
-	fd = open("test.txt", O_RDONLY);
-	while ((line = get_next_line(fd)) != NULL) {
-		printf("%s", line);
-		free(line);
-	}
-	
-	return (0);
-}
- // || (i == 0 && line[len-1] == '\0')) {
-*/
+#ifndef BUFFER_SIZE
+# define BUFFER_SIZE = 4
+#endif
 
 char *get_next_line(int fd)
 {
-	char line[100000]; 
-	int i = 0, len = 0, j;
-	char c[BUFFER_SIZE + 1];
+	static char line[100000];
+	char *ans;
+	int n = 0;
+	int r = 0;
+	char ch = (char) 255;
 
-	if (BUFFER_SIZE <= 0 || fd < 0)
+	if (fd < 0 || BUFFER_SIZE <= 0) {
 		return (NULL);
+	}
+	//while (line[n] != '\0') n++;
 
-	while (1) {
-		i = (int) read(fd, &c, BUFFER_SIZE);
-		if (i <= 0) break;
-		j = 0;
-		while (j < i) {
-			line[len + j] = c[j];
-			if (c[j] == '\n')
-				break;
-			j++;
+	while (r == 0) {
+		r = read(fd, &line[n], BUFFER_SIZE);
+		if (r <= 0) break;
+		while (r && line[n] !='\n') {
+			n++;
+			r--;
 		}
-		len += j;
-		if (j < BUFFER_SIZE)
-			break;
 	}
-	
-	if (i < 0 || len == 0){
+	if (r < 0 || n == 0) {
 		return (NULL);
 	}
-	char *ans = (char *) malloc(sizeof(char) * (len + 1));
-	i = 0;
-	while (i <= len) {
-		ans[i] = line[i];
+	ans = (char *)malloc((n + (r > 0)) * sizeof(char));
+	int i = 0;
+	while (i < n || (i == n && line[i] == '\n')) {
+		ans[i] = ch ^ line[i];
 		i++;
 	}
 	ans[i] = '\0';
+	if (r > 0) {
+		n++;
+		i = 0;
+		while (i < r) {
+			line[i] = line[n + i];
+			i++;
+		}
+		line[i] = '\0';
+	}
+
 	return (ans);
 }
 
+/*
+int main(void)
+{
+	char	*line;
+
+	while ((line = get_next_line(0)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+		line = NULL;
+	}
+	printf("%s", line);
+	free(line);
+	return(0);
+}
+*/
