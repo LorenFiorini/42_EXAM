@@ -1,5 +1,39 @@
 #include "exam.hpp"
 
+// ==> CGV Acceptation
+
+void CGVAcceptation(void)
+{
+    system("clear");
+    std::cout << BOLD << WHITE;
+    std::cout << "You must accept these rules to use this program:" << std::endl
+              << std::endl;
+    std::cout << RESET;
+    std::ifstream file(".system/CGV.txt");
+    std::string line;
+    while (std::getline(file, line))
+        std::cout << line << std::endl;
+
+    std::cout << BOLD << WHITE << std::endl;
+    std::cout << RESET;
+    std::string input;
+    std::getline(std::cin, input);
+    if (input != "agree")
+    {
+        std::cout << "You must accept these rules to use this program." << std::endl;
+        exit(0);
+    }
+    else
+    {
+        std::ofstream file(".system/acceptCGV");
+        file << "1";
+        file.close();
+        // thanks for accepting
+        std::cout << "Thanks for accepting theses rules, and good luck for your exam!" << std::endl;
+        sleep(2);
+    }
+}
+
 // ==> Shell prompt
 void exam::exam_prompt(void)
 {
@@ -137,6 +171,10 @@ int main(int argc, char **argv)
         remove("a.out");
 
     exam exm;
+
+    // Adding CGV Acceptation
+    if (!file_exists(".system/acceptCGV"))
+        CGVAcceptation();
 
     if (file_exists(".system/exam_token/current_token.txt"))
         exm.restore_data();
