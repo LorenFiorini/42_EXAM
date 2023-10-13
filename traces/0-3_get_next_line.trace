@@ -1,0 +1,9 @@
+
+You have access to multiple processes named stud:
+    a) 92547 ./stud
+    b) 97647 ./stud
+
+leaks[97650]: leaks cannot find any existing process you have access to which has a name like 'stud'; try running with `sudo`.
+leaks[97650]: [fatal] mach port for process 0 not valid
+\n
+-------
