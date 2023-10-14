@@ -35,7 +35,7 @@ static void	print_error(int error_type, char *str) {
 		write(STDERR_FILENO, str, ft_strlen(str));
 	}
 	write(STDERR_FILENO, "\n", 1);
-	if (error_type >= ERROR_FATAL) {
+	if (error_type == ERROR_FATAL) {
 		exit(EXIT_FAILURE);
 	}
 }
@@ -68,15 +68,15 @@ int	main(int argc, char **argv, char **envp)
 			} else {
 				// printf("It changed\n");
 			}
-		} else if ((argv + i) != (command) && (argv[i] == NULL || strcmp(argv[i], ";") == 0)) {
+		} else if (argv[i] == NULL || strcmp(argv[i], ";") == 0) {
 			if (fork() == 0) {
 				// printf("; child\n");
 				dup2(fd[2], 0);
 				close(fd[2]);
 				argv[i] = NULL;
 				execve(command[0], command, envp);
-				print_error(ERROR_EXECVE, command[0]);
-				// exit(1);
+				print_error(ERROR_EXECVE, command[1]);
+				exit(1);
 			} else {
 				// printf("; parent\n");
 				close(fd[2]);
@@ -84,7 +84,7 @@ int	main(int argc, char **argv, char **envp)
 					;
 				fd[2] = dup(0);
 			}
-		} else if ((argv + i) != (command) && strcmp(argv[i], "|") == 0) {
+		} else if (strcmp(argv[i], "|") == 0) {
 			pipe(fd);
 			if (fork() == 0) {
 				// printf("| child\n");
@@ -95,8 +95,8 @@ int	main(int argc, char **argv, char **envp)
 				close(fd[2]);
 				argv[i] = NULL;
 				execve(command[0], command, envp);
-				print_error(ERROR_EXECVE, command[0]);
-				// exit(1);
+				print_error(ERROR_EXECVE, command[1]);
+				exit(1);
 			} else {
 				// printf("| parent\n");
 				close(fd[2]);
