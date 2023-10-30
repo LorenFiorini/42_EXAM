@@ -31,14 +31,10 @@ int main(int argc, char **argv, char **envp)
 
 	while (i < argc && argv[i]) {
 		cmd = &argv[i];
-		// printf("cmd: %s\n", cmd[0]);	// DEBUG
+		printf("cmd: %s\n", cmd[0]);	// DEBUG
 		while (argv[i] && strcmp(argv[i], "|") != 0 && strcmp(argv[i], ";") != 0) {
 			i++;
-			// printf("argv[%d]: %s\n", i, argv[i]);	// DEBUG
-		}
-		if ((argv + i) == (cmd)) {
-			i++;
-			continue;
+			printf("argv[%d]: %s\n", i, argv[i]);	// DEBUG
 		}
 
 		if (strcmp(cmd[0], "cd") == 0) {
@@ -54,7 +50,7 @@ int main(int argc, char **argv, char **envp)
 		} else if (argv[i] && strcmp(argv[i], "|") == 0) {
 			if (pipe(fd)) {
 				write_to_stderr("error: fatal\n");
-				// exit(1);
+				exit(1);
 			}
 			int tmp = fd[0];
 			fd[0] = fd[2];
@@ -64,62 +60,58 @@ int main(int argc, char **argv, char **envp)
 			if (pid == 0) {
 				// Child
 				argv[i] = NULL;
-				dup2(fd[0], STDIN_FILENO);
+				dup2(STDIN_FILENO, fd[0]);
 				close(fd[0]);
-				dup2(fd[1], STDOUT_FILENO);
+				dup2(STDOUT_FILENO, fd[1]);
 				close(fd[1]);
-				close(fd[2]);
-
 				execve(cmd[0], cmd, envp);
 
 				write_to_stderr("error: cannot execute ");
 				write_to_stderr(cmd[0]);
 				write_to_stderr("\n");
-				// exit(1);
+				exit(1);
 			} else if (pid > 0) {
 				// Parent
 				close(fd[0]);
 				close(fd[1]);
+				while (waitpid(-1, NULL, WUNTRACED) == -1)
+					;
 
 			} else {
 				// Failed fork 
 				write_to_stderr("error: fatal\n");
-				// exit(1);
+				exit(1);
 			}
 		} else if (!argv[i] || strcmp(argv[i], ";") == 0) {
 			int pid = fork();
 			if (pid == 0) {
 				// Child
 				argv[i] = NULL;
-				dup2(fd[2], STDIN_FILENO);
-				close(fd[2]);
+				dup2(STDIN_FILENO, fd[0]);
+				close(fd[0]);
+				dup2(STDOUT_FILENO, fd[1]);
+				close(fd[1]);
+				// close(fd[2]);
 				execve(cmd[0], cmd, envp);
 
 				write_to_stderr("error: cannot execute ");
 				write_to_stderr(cmd[0]);
 				write_to_stderr("\n");
-				// exit(1);
+				exit(1);
 			} else if (pid > 0) {
 				// Parent
+				close(fd[0]);
+				close(fd[1]);
 				close(fd[2]);
-				while (waitpid(-1, NULL, WUNTRACED) != -1)
-					;
 				fd[2] = dup(STDIN_FILENO);
 			} else {
 				// Failed fork 
 				write_to_stderr("error: fatal\n");
-				// exit(1);
+				exit(1);
 			}
 		}
-		i++;
 	}
 	close(fd[2]);
-
-	// i = 0;
-	// while (argv[i]) {
-	// 	printf("argv[%d]: %s\n", i, argv[i]);	// DEBUG
-	// 	i++;
-	// }
 	return (0);
 }
 
