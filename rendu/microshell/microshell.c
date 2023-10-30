@@ -1,112 +1,124 @@
 
-#include <stdio.h>
+
 #include <unistd.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/wait.h>
 #include <string.h>
+#include <stdio.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
-enum e_error {
-	ERROR_CD_BAD_ARGS = 0,
-	ERROR_CD_CHDIR,
-	ERROR_FATAL,
-	ERROR_EXECVE
-};
 
-static int	ft_strlen(char *str) {
-	int i = 0;
-	while (*(str + i)) {
+size_t	ft_strlength(char *str) {
+	size_t i = 0;
+	while (str[i]) {
 		i++;
 	}
 	return (i);
 }
 
-static void	print_error(int error_type, char *str) {
-	char	*error_msg[5] = {
-		"error: cd: bad arguments",
-		"error: cd: cannot change directory to ",
-		"error: fatal",
-		"error: cannot execute ",
-		NULL
-	};
-	// printf("%s\n", error_msg[error_type]);
-	write(STDERR_FILENO, error_msg[error_type], ft_strlen(error_msg[error_type]));
-	if (str) {
-		write(STDERR_FILENO, str, ft_strlen(str));
-	}
-	write(STDERR_FILENO, "\n", 1);
-	if (error_type >= ERROR_FATAL) {
-		exit(EXIT_FAILURE);
-	}
+void	write_to_stderr(char *str) {
+	write(STDERR_FILENO, str, ft_strlength(str));
 }
 
-int	main(int argc, char **argv, char **envp)
+int main(int argc, char **argv, char **envp)
 {
-	int fd[3];
+	char	**cmd;
+	int		i = 1;
+	int		fd[3];
 
-	fd[2] = dup(0);
+	fd[2] = dup(STDIN_FILENO);
 
-	// printf("argc = %i\n", argc);
-	int i = 1;
-	while (i < argc) {
-		char **command = argv + i;
-		
-		while (argv[i] != NULL && strcmp(argv[i], "|") && strcmp(argv[i], ";"))
-		{	
-			// printf("argv[%i] = %s\n", i, argv[i]);
+	while (argv[i]) {
+		cmd = &argv[i];
+		printf("cmd: %s\n", cmd[0]);	// DEBUG
+		while (argv[i] && strcmp(argv[i], "|") != 0 && strcmp(argv[i], ";") != 0) {
 			i++;
+			printf("argv[%d]: %s\n", i, argv[i]);	// DEBUG
 		}
-		// printf("---> argv[%i] = %s\n", i, argv[i]);
-		if (strcmp(command[0], "cd") == EXIT_SUCCESS) {					// strcmp(argv[i], "cd")	or	strcmp(command, "cd")
-			if (*(argv + i - 2) != *(command)) {			// strcmp(argv[i], command[2]) != EXIT_SUCCESS	or	(argv + i) != (command + 2) 
-				// printf("Bad argument\n");
-				// printf("command: %s != %s \n", *argv + i - 2, *command);
-				print_error(ERROR_CD_BAD_ARGS, NULL);
-			} else if (chdir(command[1]) != EXIT_SUCCESS) {
-				// printf("Cannot change directory");
-				print_error(ERROR_CD_CHDIR, argv[i - 1]);
+
+		if (strcmp(cmd[0], "cd") == 0) {
+			if (cmd[0] != argv[i - 2]) {
+				write_to_stderr("error: cd: bad arguments\n");
+			} else if (chdir(argv[i - 1]) != 0) {
+				write_to_stderr("error: cd: cannot change directory to ");
+				write_to_stderr(argv[i - 1]);
+				write_to_stderr("\n");
 			} else {
-				// printf("It changed\n");
+				write(1, "S\n", 2);
 			}
-		} else if ((argv + i) != (command) && (argv[i] == NULL || strcmp(argv[i], ";") == 0)) {
-			if (fork() == 0) {
-				// printf("; child\n");
-				dup2(fd[2], 0);
-				close(fd[2]);
+		} else if (argv[i] && strcmp(argv[i], "|") == 0) {
+			if (pipe(fd)) {
+				write_to_stderr("error: fatal\n");
+				exit(1);
+			}
+			int tmp = fd[0];
+			fd[0] = fd[2];
+			fd[2] = tmp;
+
+			int pid = fork();
+			if (pid == 0) {
+				// Child
 				argv[i] = NULL;
-				execve(command[0], command, envp);
-				print_error(ERROR_EXECVE, command[0]);
-				// exit(1);
-			} else {
-				// printf("; parent\n");
-				close(fd[2]);
-				while (waitpid(-1, NULL, WUNTRACED) != -1)
-					;
-				fd[2] = dup(0);
-			}
-		} else if ((argv + i) != (command) && strcmp(argv[i], "|") == 0) {
-			pipe(fd);
-			if (fork() == 0) {
-				// printf("| child\n");
+				dup2(STDIN_FILENO, fd[0]);
 				close(fd[0]);
-				dup2(fd[1], 1);
+				dup2(STDOUT_FILENO, fd[1]);
 				close(fd[1]);
-				dup2(fd[2], 0);
-				close(fd[2]);
-				argv[i] = NULL;
-				execve(command[0], command, envp);
-				print_error(ERROR_EXECVE, command[0]);
-				// exit(1);
+				execve(cmd[0], cmd, envp);
+
+				write_to_stderr("error: cannot execute ");
+				write_to_stderr(cmd[0]);
+				write_to_stderr("\n");
+				exit(1);
+			} else if (pid > 0) {
+				// Parent
+				close(fd[0]);
+				close(fd[1]);
+				while (waitpid(-1, NULL, WUNTRACED) == -1)
+					;
+
 			} else {
-				// printf("| parent\n");
-				close(fd[2]);
+				// Failed fork 
+				write_to_stderr("error: fatal\n");
+				exit(1);
+			}
+		} else if (!argv[i] || strcmp(argv[i], ";") == 0) {
+			int pid = fork();
+			if (pid == 0) {
+				// Child
+				argv[i] = NULL;
+				dup2(STDIN_FILENO, fd[0]);
+				close(fd[0]);
+				dup2(STDOUT_FILENO, fd[1]);
 				close(fd[1]);
-				fd[2] = fd[0];
+				// close(fd[2]);
+				execve(cmd[0], cmd, envp);
+
+				write_to_stderr("error: cannot execute ");
+				write_to_stderr(cmd[0]);
+				write_to_stderr("\n");
+				exit(1);
+			} else if (pid > 0) {
+				// Parent
+				close(fd[0]);
+				close(fd[1]);
+				close(fd[2]);
+				fd[2] = dup(STDIN_FILENO);
+			} else {
+				// Failed fork 
+				write_to_stderr("error: fatal\n");
+				exit(1);
 			}
 		}
-		i++;
 	}
-	// printf("while finished");
 	close(fd[2]);
 	return (0);
 }
+
+/**
+ * @brief Errors to STDERR
+ * 
+ * "error: cd: bad arguments"
+ * "error: cd: cannot change directory to path_to_change"
+ * "error: fatal"
+ * "error: cannot execute executable_that_failed"
+ */
