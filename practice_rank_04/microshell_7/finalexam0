@@ -1,0 +1,33 @@
+./a.out /bin/ls
+a.out
+finalexam
+finalexam0
+microshell
+sourcexam
+test.sh
+Ended
+./a.out /bin/ls microshell.c
+Ended
+./a.out /bin/ls salut
+Ended
+./a.out ;
+Ended
+./a.out ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ; ;
+Ended
+./a.out ; ; /bin/echo OK
+OK
+Ended
+./a.out ; ; /bin/echo OK ;
+OK
+Ended
+./a.out ; ; /bin/echo OK ; ;
+OK
+Ended
+./a.out ; ; /bin/echo OK ; ; ; /bin/echo OK
+OK
+OK
+Ended
+./a.out /bin/ls | /usr/bin/grep a.out
+a.out
+Ended
+./a.out /bin/ls | /usr/bin/grep microshell | /usr/bin/grep micro
