@@ -6,12 +6,12 @@
 #    By: jcluzet <jcluzet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/20 02:26:11 by jcluzet           #+#    #+#              #
-#    Updated: 2022/09/03 22:53:09 by jcluzet          ###   ########.fr        #
+#    Updated: 2022/09/01 23:52:05 by jcluzet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-FILE='microshell.c'
-ASSIGN='microshell/microshell.c'
+MAIN='main.cpp'
+MAIN1='../.system/grading/main.cpp'
 
 index=0
 
@@ -20,74 +20,52 @@ then
     rm traceback
 fi
 
-cp .system/grading/test.sh rendu/
-
 cd .system/grading
-{
-	gcc -Wall -Wextra -Werror $FILE
-} &>/dev/null
-{
-cp a.out ../../rendu/a.out
-} &>/dev/null
-
+clang++ -Wall -Wextra -Werror -std=c++98 -o source Warlock.cpp ASpell.cpp ATarget.cpp Dummy.cpp Fwoosh.cpp $MAIN
+./source | cat -e > sourcexam       #TESTING
+rm source
 cd ../../rendu
-touch sourcexam
-touch finalexam
-sh test.sh &> sourcexam       #TESTING VRAI
 {
-rm a.out
-} &>/dev/null
+clang++ -Wall -Wextra -Werror -std=c++98 -o final cpp_module01/Warlock.cpp cpp_module01/ASpell.cpp cpp_module01/ATarget.cpp cpp_module01/Dummy.cpp cpp_module01/Fwoosh.cpp $MAIN1
+}  &>../.system/grading/traceback
+# if there is a traceback file, exit this script
+# if [ -e ../.system/grading/traceback ]
+# then
+# 	mv ../.system/grading/traceback ../traceback
+# 	exit 1
+# fi
 {
-gcc -Wall -Wextra -Werror $ASSIGN
-}  &>.dev
-sh test.sh &> finalexam        #TESTING STUD
-# {
-# }  &>/dev/null
-
-
-
+./final | cat -e > finalexam        #TESTING
+mv finalexam ../.system/grading/
+rm final
+}  &>/dev/null
+cd ../.system/grading
 DIFF=$(diff sourcexam finalexam)
+echo "" >> traceback
 if [ "$DIFF" != "" ]
 then
-        echo "----------------8<-------------[ START TEST " >> traceback
-		if [ -e a.out ]
-		then
-        printf "        💻 ALL TESTS: \n\n$(cat ../.system/grading/test.sh)\n" >> traceback
-        printf "\n\n        🔎 YOUR OUTPUT:\n" >> traceback
-        cat finalexam >> traceback
-        printf "\n\n        🗝 EXPECTED OUTPUT:\n" >> traceback
+		index=$(($index + 1))
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
 		cat sourcexam >> traceback
+		echo '\n' >> traceback
+		if [ -e finalexam ]
+		then
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>\n\n" >> traceback
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
+		cat finalexam >> traceback
 		else
-		printf "        🔎 YOUR OUTPUT:\n" >> traceback
-        # cat finalexam >> traceback
-        printf "\n";
-        echo "$(cat .dev)" >> traceback
-        rm .dev
-		printf "\n        ❌ COMPILATION ERROR\n" >> traceback
+		echo "" >> traceback
 		fi
-        echo "----------------8<------------- END TEST ]" >> traceback
-		index=$((index+1))
+		echo '\n' >> traceback
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
 fi
-# exit
-{
-mv traceback ../traceback
-}	&>/dev/null
-
 rm finalexam
-{
-rm sourcexam
-rm a.out
-rm .dev
-} &>/dev/null
-rm test.sh
-
-cd ../.system/grading
-
-#mv .system/tester.sh .system/grading/tester.sh
-
 
 if [ $index -eq 0 ]
 then
-	echo "OK"
 	touch passed
 fi
+{
+mv traceback ../../traceback
+}	&>/dev/null
+rm sourcexam

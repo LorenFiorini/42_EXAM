@@ -1,6 +1,10 @@
 {
     "files.associations": {
         "fstream": "c",
-        "locale": "c"
-    }
+        "locale": "c",
+        "iosfwd": "cpp"
+    },
+    "editor.tabSize": 4,
+    "editor.detectIndentation": false,
+    "editor.insertSpaces": false
 }
