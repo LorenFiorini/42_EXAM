@@ -1,28 +1,30 @@
 
+
+
 #ifndef ASPELL_HPP
 # define ASPELL_HPP
-
 # include <string>
 # include <iostream>
 
-
-class ASpell {
+class ASpell
+{
 	protected:
 		std::string _name;
 		std::string _effects;
-		ASpell(void);               // Constructor
-		ASpell(ASpell const& src);  // Copy Constructor
-		ASpell& operator=(ASpell const& rhs);  // Assignation operator
+		ASpell(void);
+
 	public:
-		ASpell(std::string name, std::string effects);  // Constructor
-		~ASpell(void);                                  // Destructor
+		ASpell(ASpell &src);
+		ASpell	&operator=(ASpell &src);
+		ASpell(std::string const &name, std::string const &effects);
+		virtual ~ASpell(void);
 
-		std::string getName(void);
-		std::string getEffects(void);
+		std::string	getName(void) const;
+		std::string	getEffects(void) const;
 
-		virtual ASpell* clone(void) const = 0;
+		virtual ASpell	*clone() const = 0;
+
+		void launch(ATarget const &target) const;
 };
 
 #endif
-
-
