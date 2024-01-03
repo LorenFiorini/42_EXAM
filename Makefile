@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nnuno-ca <nnuno-ca@student.42porto.com>    +#+  +:+       +#+         #
+#    By: lfiorini <lfiorini@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/21 01:05:24 by jcluzet           #+#    #+#              #
-#    Updated: 2023/01/13 02:33:46 by nnuno-ca         ###   ########.fr        #
+#    Updated: 2024/01/03 20:36:20 by lfiorini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 

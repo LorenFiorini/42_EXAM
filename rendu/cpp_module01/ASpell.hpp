@@ -1,10 +1,9 @@
 
 #ifndef ASPELL_HPP
 # define ASPELL_HPP
-# include "ATarget.hpp"
-# include <iostream>
-# include <string>
 
+# include <string>
+# include <iostream>
 
 class ASpell {
 protected:
@@ -14,16 +13,14 @@ protected:
 public:
 	ASpell(void);
 	ASpell(ASpell const &src);
-	ASpell& operator=(ASpell const rhs);
+	ASpell& operator=(ASpell const &src);
 	ASpell(std::string const &name, std::string const &effects);
-	virtual ~ASpell(void);
+	~ASpell(void);
 
-	std::string getName(void) const;
-	std::string getEffects(void) const;
-	void launch(ATarget const &target) const;
+	std::string const &getName(void) const;
+	std::string const &getEffects(void) const;
 	
-	virtual ASpell* clone(void) const = 0;
-	
+	ASleep *clone(void) const = 0;
 };
 
 #endif

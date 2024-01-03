@@ -1,39 +1,34 @@
 
 #include "ASpell.hpp"
 
-ASpell::ASpell(void) : _name(""), _effects("") { }
 
+ASpell::ASpell(void) {
+	this->_name = "";
+	this->_effects = "";
+}
 ASpell::ASpell(ASpell const &src) {
 	*this = src;
 }
-
-ASpell& ASpell::operator=(ASpell rhs) {
-	if (this != &rhs) {
-		this->_name = rhs._name;
-		this->_effects = rhs._effects;
-	}
+ASpell& ASpell::operator=(ASpell const &src) {
+	this->_name = src._name;
+	this->_effects = src._effects;
 	return (*this);
 }
-
-ASpell::ASpell(std::string const &name, std::string const &effects) : _name(name), _effects(effects) {
-	// std::cout << this->_name << ": This looks like another boring day." << std::endl;
-
+ASpell::ASpell(std::string const &name, std::string const &effects) {
+	_name = name;
+	_effects = effects;
 }
-
 ASpell::~ASpell(void) {
-	// std::cout << this->_name << ": My job here is done!" << std::endl;
+	
 }
 
-
-std::string ASpell::getName(void) const {
+std::string const &ASpell::getName(void) const {
 	return (this->_name);
 }
-
-std::string ASpell::getEffects(void) const {
+std::string const &ASpell::getEffects(void) const {
 	return (this->_effects);
 }
 
-void launch(ATarget const &target) const {
-	// std::cout << this->_type << ": This looks like another boring day." << std::endl;
-	target.getHitBySpell(this);
+void ASpell::introduce(void) const {
+	std::cout << this->_name << ": I am " << this->_name << ", " << this->_effects << "!" << std::endl;
 }
