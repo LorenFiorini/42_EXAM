@@ -6,7 +6,7 @@
 #    By: lfiorini <lfiorini@student.42heilbronn.    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/21 01:05:24 by jcluzet           #+#    #+#              #
-#    Updated: 2024/01/03 20:36:20 by lfiorini         ###   ########.fr        #
+#    Updated: 2024/01/05 20:17:10 by lfiorini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,8 @@ re: clean
 gradejustinstall:
 	@bash .system/launch.sh gradejustinstall
 
-grade: clean
+# grade: clean
+grade:
 	@bash .system/launch.sh grade
 
 clean:
