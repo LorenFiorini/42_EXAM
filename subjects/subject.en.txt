@@ -92,3 +92,12 @@ Richard: This looks like another boring day.$
 Richard: I am Richard, the Titled!$
 Target Practice Dummy has been fwooshed!$
 Richard: My job here is done!$
+
+
+
+
+07:52
+My Notes:
+1. Use getters in constructors when taking " const &"
+	_name = obj.getName();
+	_effects = obj.getEffects();

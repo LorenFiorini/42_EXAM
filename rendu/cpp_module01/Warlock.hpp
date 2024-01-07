@@ -6,22 +6,25 @@
 # include <iostream>
 
 class Warlock {
-private:
-	std::string _name;
-	std::string _title;
-	Warlock(void);
-	Warlock(Warlock const &obj);
-	Warlock& operator=(Warlock const &obj);
-public:
-	Warlock(std::string const &name, std::string const &title);
-	~Warlock(void);
 
-	std::string const &getName(void) const;
-	std::string const &getTitle(void) const;
+	private :
+		Warlock & operator=(Warlock const & rhs);
+		Warlock(Warlock const & obj);
+		Warlock();
+		std::string _name;
+		std::string _title;
+		std::map < std::string, ASpell * > _SpellBook;
 
-	void setTitle(std::string const &title);
-	
-	void introduce() const;
+	public :
+		Warlock(std::string const &name, std::string const &title);
+		~Warlock();
+		std::string const & getName() const;
+		std::string const & getTitle() const;
+		void	setTitle(std::string const & str);
+		void	introduce() const;
+		void learnSpell(ASpell* spell);
+		void forgetSpell(std::string SpellName);
+		void launchSpell(std::string SpellName, ATarget const & target);
 };
 
 #endif
