@@ -1,10 +1,7 @@
 
 #include "cpp_module00/Warlock.hpp"
 
-# include <iostream>
-# include <string>
-
-int main(void)
+int main()
 {
   Warlock const richard("Richard", "Mistress of Magma");
   richard.introduce();
@@ -19,3 +16,7 @@ int main(void)
 
   return (0);
 }
+
+/*
+ASpell.hpp ASpell.cpp ATarget.hpp ATarget.cpp Fwoosh.hpp Fwoosh.cpp Dummy.hpp Dummy.cpp
+*/

@@ -1,10 +1,7 @@
 
 #include "cpp_module00/Warlock.hpp"
 
-# include <iostream>
-# include <string>
-
-int main(void)
+int main()
 {
   Warlock const richard("Richard", "Mistress of Magma");
   richard.introduce();
