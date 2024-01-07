@@ -13,7 +13,7 @@ class ATarget {
 		std::string _type;
 
 	public:
-		ATarget(void);
+		// ATarget(void);
 		ATarget(std::string type);
 		ATarget(ATarget const &obj);
 		ATarget &operator=(ATarget const &obj);
@@ -21,9 +21,9 @@ class ATarget {
 
 		std::string getType(void) const;
 
-		virtual ATarget *clone() const = 0;
+		virtual ATarget* clone() const = 0;
 
-		void getHitBySpell(ASpell spell) const;
+		void getHitBySpell(ASpell const &spell) const;
 };
 
 #endif
