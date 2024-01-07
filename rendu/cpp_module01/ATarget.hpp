@@ -9,21 +9,21 @@
 class ASpell;
 
 class ATarget {
-	private:
+	protected:
 		std::string _type;
 
 	public:
 		ATarget(void);
-		ATarget(std::string const &type);
+		ATarget(std::string type);
 		ATarget(ATarget const &obj);
 		ATarget &operator=(ATarget const &obj);
 		virtual ~ATarget(void);
 
-		std::string const &getType(void) const;
+		std::string getType(void) const;
 
 		virtual ATarget *clone() const = 0;
 
-		void getHitBySpell(ASpell const &spell) const;
+		void getHitBySpell(ASpell spell) const;
 };
 
 #endif

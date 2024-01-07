@@ -24,7 +24,7 @@ ASpell.hpp ASpell.cpp ATarget.hpp ATarget.cpp Fwoosh.hpp Fwoosh.cpp Dummy.hpp Du
 
 #include "cpp_module01/Warlock.hpp"
 #include "cpp_module01/ASpell.hpp"
-#include "cpp_module01/Atarget.hpp"
+#include "cpp_module01/ATarget.hpp"
 #include "cpp_module01/Dummy.hpp"
 #include "cpp_module01/Fwoosh.hpp"
 

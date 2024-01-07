@@ -8,19 +8,19 @@ class ATarget;
 #include <string>
 
 class ASpell {
-	private:
+	protected:
 		std::string _name;
 		std::string _effects;
 
 	public:
 		ASpell(void);
-		ASpell(std::string const &name, std::string const &effects);
+		ASpell(std::string name, std::string effects);
 		ASpell(ASpell const &obj);
 		ASpell &operator=(ASpell const &obj);
 		virtual ~ASpell(void);
 
-		std::string const &getName(void) const;
-		std::string const &getEffects(void) const;
+		std::string getName(void) const;
+		std::string getEffects(void) const;
 
 		void launch(ATarget const &target) const;
 
