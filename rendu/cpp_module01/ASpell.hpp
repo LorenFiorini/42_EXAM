@@ -5,24 +5,25 @@
 # include <string>
 # include <iostream>
 
-
 class ASpell {
-	protected:
-		std::string _name;
-		std::string _effects;
-		ASpell(void);               // Constructor
-		ASpell(ASpell const& src);  // Copy Constructor
-		ASpell& operator=(ASpell const& rhs);  // Assignation operator
-	public:
-		ASpell(std::string name, std::string effects);  // Constructor
-		~ASpell(void);                                  // Destructor
+private:
+	std::string	_name;
+	std::string	_effects;
 
-		std::string getName(void);
-		std::string getEffects(void);
+	ASpell(void);
+	ASpell(ASpell &src);
+	ASpell& operator=(ASpell &src);
 
-		virtual ASpell* clone(void) const = 0;
+public:
+	const std::string &getName(void) const;
+	const std::string &getEffects(void) const;
+
+	void setTitle(const std::string &title);
+
+	ASpell(const std::string &name, const std::string &title);
+	~ASpell(void);
+
+	void introduce(void) const;
 };
 
 #endif
-
-

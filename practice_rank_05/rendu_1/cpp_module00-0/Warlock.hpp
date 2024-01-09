@@ -4,23 +4,22 @@
 
 # include <string>
 # include <iostream>
-
 class Warlock {
 private:
-	std::string	_name;
-	std::string	_title;
+	std::string	name;
+	std::string	title;
 
 	Warlock(void);
 	Warlock(Warlock &src);
 	Warlock& operator=(Warlock &src);
 
 public:
-	const std::string &getName(void) const;
-	const std::string &getTitle(void) const;
+	const std::string getName(void) const;
+	const std::string getTitle(void) const;
 
-	void setTitle(const std::string &title);
+	void setTitle(const std::string title);
 
-	Warlock(const std::string &name, const std::string &title);
+	Warlock(std::string name, std::string title);
 	~Warlock(void);
 
 	void introduce(void) const;
