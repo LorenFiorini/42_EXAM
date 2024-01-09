@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lfiorini <lfiorini@student.42heilbronn.    +#+  +:+       +#+         #
+#    By: nnuno-ca <nnuno-ca@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/04/21 01:05:24 by jcluzet           #+#    #+#              #
-#    Updated: 2024/01/05 20:17:10 by lfiorini         ###   ########.fr        #
+#    Updated: 2023/01/13 02:33:46 by nnuno-ca         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,8 +19,7 @@ re: clean
 gradejustinstall:
 	@bash .system/launch.sh gradejustinstall
 
-# grade: clean
-grade:
+grade: clean
 	@bash .system/launch.sh grade
 
 clean:

@@ -4,31 +4,26 @@
 
 # include <string>
 # include <iostream>
-# include <map>
-# include "ASpell.hpp"
-# include "ATarget.hpp"
-
 
 class Warlock {
+private:
+	std::string	_name;
+	std::string	_title;
 
-	private :
-		Warlock & operator=(Warlock const & rhs);
-		Warlock(Warlock const & obj);
-		Warlock();
-		std::string _name;
-		std::string _title;
-		std::map < std::string, ASpell * > _SpellBook;
+	Warlock(void);
+	Warlock(Warlock &src);
+	Warlock& operator=(Warlock &src);
 
-	public :
-		Warlock(std::string const &name, std::string const &title);
-		~Warlock();
-		std::string const & getName() const;
-		std::string const & getTitle() const;
-		void	setTitle(std::string const & str);
-		void	introduce() const;
-		void learnSpell(ASpell* spell);
-		void forgetSpell(std::string SpellName);
-		void launchSpell(std::string SpellName, ATarget const & target);
+public:
+	const std::string &getName(void) const;
+	const std::string &getTitle(void) const;
+
+	void setTitle(const std::string &title);
+
+	Warlock(const std::string &name, const std::string &title);
+	~Warlock(void);
+
+	void introduce(void) const;
 };
 
 #endif

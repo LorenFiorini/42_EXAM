@@ -7,21 +7,23 @@
 
 class Warlock {
 private:
-	std::string _name;
-	std::string _title;
+	std::string	_name;
+	std::string	_title;
+
 	Warlock(void);
-	Warlock(Warlock const &obj);
-	Warlock& operator=(Warlock const &obj);
+	Warlock(Warlock &src);
+	Warlock& operator=(Warlock &src);
+
 public:
-	Warlock(std::string const &name, std::string const &title);
+	const std::string &getName(void) const;
+	const std::string &getTitle(void) const;
+
+	void setTitle(const std::string &title);
+
+	Warlock(const std::string &name, const std::string &title);
 	~Warlock(void);
 
-	std::string const &getName(void) const;
-	std::string const &getTitle(void) const;
-
-	void setTitle(std::string const &title);
-	
-	void introduce() const;
+	void introduce(void) const;
 };
 
 #endif
