@@ -9,21 +9,19 @@
 class ASpell;
 
 class ATarget {
-	protected:
-		std::string _type;
+protected:
+	std::string _type;
+	ATarget(void);
 
-	public:
-		// ATarget(void);
-		ATarget(std::string type);
-		ATarget(ATarget const &obj);
-		ATarget &operator=(ATarget const &obj);
-		virtual ~ATarget(void);
+public:
+	ATarget(ATarget const &obj);
+	ATarget &operator=(ATarget const &obj);
+	ATarget(std::string type);
+	virtual ~ATarget(void);
+	std::string getType(void) const;
+	void getHitBySpell(ASpell const &spell) const;
+	virtual ATarget *clone(void) const = 0;
 
-		std::string getType(void) const;
-
-		virtual ATarget* clone() const = 0;
-
-		void getHitBySpell(ASpell const &spell) const;
 };
 
 #endif

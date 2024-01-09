@@ -20,8 +20,8 @@ ASpell::~ASpell(void) {
 
 ASpell &ASpell::operator=(ASpell const &obj) {
 	if (this != &obj) {
-		this->_name = obj.getName();
-		this->_effects = obj.getEffects();
+		this->_name = obj._name;
+		this->_effects = obj._effects;
 	}
 	return (*this);
 }
@@ -35,7 +35,7 @@ std::string ASpell::getEffects(void) const {
 }
 
 void ASpell::launch(ATarget const & target) const {
-	target.getHitBySpell((*this));
+	target.getHitBySpell(*this);
 	return ;
 }
 

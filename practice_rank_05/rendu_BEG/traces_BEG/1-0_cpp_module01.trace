@@ -1,0 +1,25 @@
+cpp_module01/ASpell.cpp:38:8: error: member access into incomplete type 'const ATarget'
+        target.getHitBySpell((*this));
+              ^
+cpp_module01/ASpell.hpp:8:7: note: forward declaration of 'ATarget'
+class ATarget;
+      ^
+1 error generated.
+cpp_module01/ATarget.cpp:33:51: error: member access into incomplete type 'const ASpell'
+        std::cout << this->_type << " has been " << spell.getEffects() << "!" << std::endl;
+                                                         ^
+cpp_module01/ATarget.hpp:8:7: note: forward declaration of 'ASpell'
+class ASpell;
+      ^
+1 error generated.
+
+<--------------~-~-~-~-~-~-~-~-~------------>
+Richard: This looks like another boring day.$
+Richard: I am Richard, the Titled!$
+Target Practice Dummy has been fwooshed!$
+Richard: My job here is done!$
+\n
+<--------------~-~-~-~-~-~-~-~-~------------>\n\n
+<--------------~-~-~-~-~-~-~-~-~------------>
+\n
+<--------------~-~-~-~-~-~-~-~-~------------>
