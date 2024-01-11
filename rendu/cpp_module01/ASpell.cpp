@@ -16,4 +16,7 @@ ASpell& ASpell::operator=(ASpell const &obj) {
 std::string ASpell::getName() const {return this->_name; }
 std::string ASpell::getEffects() const {return this->_effects; }
 
-// virtual ASpell *clone() const = 0;
+// void ASpell::launch(ATarget const & target) {
+void ASpell::launch(ATarget const & target) const {
+	target.getHitBySpell(*this);
+}

@@ -4,6 +4,9 @@
 
 # include <string>
 # include <iostream>
+# include "ATarget.hpp"
+
+class ATarget;
 
 class ASpell {
 protected:
@@ -11,9 +14,9 @@ protected:
 	std::string _effects;
 
 	ASpell();
+public:
 	ASpell(ASpell const &obj);
 	ASpell& operator=(ASpell const &obj);
-public:
 	ASpell(std::string const & name, std::string const & effects);
 	virtual ~ASpell();
 
@@ -21,6 +24,8 @@ public:
 	std::string getEffects() const;
 
 	virtual ASpell *clone() const = 0;
+
+	void launch(ATarget const & target) const;
 };
 
 #endif

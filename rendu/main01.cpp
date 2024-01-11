@@ -36,6 +36,8 @@ int main()
 	c = new Fwoosh();
 	d = new Dummy();
 
+	a.launch(b);
+
 	delete c;
 	delete d;
 	return (0);
