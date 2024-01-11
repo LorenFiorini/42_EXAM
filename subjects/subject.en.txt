@@ -65,6 +65,9 @@ Fwoosh, it will return a pointer to a new Fwoosh object.
 In the same way, create a concrete ATarget called Dummy, the type of which
 is "Target Practice Dummy". You must also implement its clone() method.
 
+
+----
+
 Add to the Warlock the following member functions:
 
 * learnSpell, takes a pointer to ASpell, that makes the Warlock learn a spell
@@ -96,6 +99,12 @@ int main()
 }
 
 ~$ ./a.out | cat -e
+Richard: This looks like another boring day.$
+Richard: I am Richard, the Titled!$
+Target Practice Dummy has been fwooshed!$
+Richard: My job here is done!$
+
+
 Richard: This looks like another boring day.$
 Richard: I am Richard, the Titled!$
 Target Practice Dummy has been fwooshed!$

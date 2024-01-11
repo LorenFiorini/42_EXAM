@@ -18,14 +18,16 @@ Warlock& Warlock::operator=(Warlock const &obj){
 }
 std::string const & Warlock::getName() const {return this->_name; }
 std::string const & Warlock::getTitle() const {return this->_title; }
-// void Warlock::setTitle(std::string const & title) const {
-// void Warlock::setTitle(std::string title) const {
+
+
 void Warlock::setTitle(std::string const & title) {
 	this->_title = title;
 }
 void Warlock::introduce() const {
 	std::cout << this->_name << ": I am " << this->_name << ", " << this->_title << "!" << std::endl;
 }
+
+
 
 void Warlock::learnSpell(ASpell * spell) {
 	this->_mp[spell->getName()] = spell;

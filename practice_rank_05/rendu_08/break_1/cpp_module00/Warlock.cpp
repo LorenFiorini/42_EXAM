@@ -26,18 +26,3 @@ void Warlock::setTitle(std::string const & title) {
 void Warlock::introduce() const {
 	std::cout << this->_name << ": I am " << this->_name << ", " << this->_title << "!" << std::endl;
 }
-
-void Warlock::learnSpell(ASpell * spell) {
-	this->_mp[spell->getName()] = spell;
-}
-void Warlock::forgetSpell(std::string spell_name) {
-	if (this->_mp.find(spell_name) != this->_mp.end()) {
-		this->_mp.erase(spell_name);
-	}
-}
-void Warlock::launchSpell(std::string spell_name, ATarget & target) {
-	if (this->_mp.find(spell_name) != this->_mp.end()) {
-		this->_mp[spell_name]->launch(target);
-	}
-
-}
