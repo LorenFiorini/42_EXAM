@@ -30,14 +30,16 @@ void Warlock::introduce() const {
 
 
 void Warlock::learnSpell(ASpell * spell) {
-	this->_mp[spell->getName()] = spell;
+	if (spell)
+		this->_mp[spell->getName()] = spell->clone();
 }
 void Warlock::forgetSpell(std::string spell_name) {
 	if (this->_mp.find(spell_name) != this->_mp.end()) {
-		this->_mp.erase(spell_name);
+		this->_mp.erase(this->_mp.find(spell_name));
 	}
 }
-void Warlock::launchSpell(std::string spell_name, ATarget & target) {
+
+void Warlock::launchSpell(std::string spell_name, ATarget const & target) {
 	if (this->_mp.find(spell_name) != this->_mp.end()) {
 		this->_mp[spell_name]->launch(target);
 	}
