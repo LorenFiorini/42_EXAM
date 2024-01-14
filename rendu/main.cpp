@@ -31,22 +31,23 @@ cpp_module01/ASpell.cpp cpp_module01/ATarget.cpp cpp_module01/Fwoosh.cpp cpp_mod
 
 int main01()
 {
-	Warlock richard("Richard", "the Titled");
-
 	{
 		// ASpell a("Fwoosh", "fwooshed");
 		// ATarget b("ATarget");
 	}
+	
+	Warlock richard("Richard", "the Titled");
+
 	Dummy bob;
 	Fwoosh* fwoosh = new Fwoosh();
 
-	// richard.learnSpell(fwoosh);
+	richard.learnSpell(fwoosh);
 
 	richard.introduce();
-	// richard.launchSpell("Fwoosh", bob);
+	richard.launchSpell("Fwoosh", bob);
 
-	// richard.forgetSpell("Fwoosh");
-	// richard.launchSpell("Fwoosh", bob);
+	richard.forgetSpell("Fwoosh");
+	richard.launchSpell("Fwoosh", bob);
 	return (0);
 
 }
