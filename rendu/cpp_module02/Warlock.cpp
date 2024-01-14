@@ -51,12 +51,14 @@ void Warlock::introduce() const {
 
 
 void Warlock::learnSpell(ASpell * spell) {
-	
+	this->_book.learnSpell(spell);
 }
 void Warlock::forgetSpell(std::string spell_name) {
-
+	this->_book.forgetSpell(spell_name);
 }
 void Warlock::launchSpell(std::string spell_name, ATarget const & target) {
-
+	// this->_book._book[spell_name]->launch(target);
+	(void) spell_name;
+	(void) target;
 }
 
