@@ -2,7 +2,6 @@
 #include "Dummy.hpp"
 
 Dummy::Dummy()
-	// : _type("Target Practice Dummy") {
 {
 	this->_type = "Target Practice Dummy";
 

@@ -5,10 +5,10 @@
 #include <string>
 #include "ASpell.hpp"
 
-class Fwoosh : public ASpell {
+class Fireball : public ASpell {
 public:
-	Fwoosh();
-	~Fwoosh();
-	Fwoosh *clone() const;
+	Fireball();
+	~Fireball();
+	Fireball *clone() const;
 };
 

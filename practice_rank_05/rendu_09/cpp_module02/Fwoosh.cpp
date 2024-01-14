@@ -3,7 +3,6 @@
 
 
 Fwoosh::Fwoosh()
-	// : _name("Fwoosh"), _effects("Target Practice Dummy") {
 		{
 	this->_name = "Fwoosh";
 	this->_effects = "fwooshed";

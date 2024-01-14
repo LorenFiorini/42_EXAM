@@ -19,8 +19,6 @@ Warlock::~Warlock() {
 	<< this->_name 
 	<< ": My job here is done!" 
 	<< std::endl;
-
-	_book.clear();
 }
 
 Warlock& Warlock::operator=(Warlock const & obj) {
@@ -49,25 +47,3 @@ void Warlock::introduce() const {
 	<< std::endl;
 
 }
-
-
-void Warlock::learnSpell(ASpell * spell) {
-	std::string spell_name = spell->getName();
-	if (_book.find(spell_name) == _book.end()) {
-		_book[spell_name] = spell->clone();
-	}
-}
-void Warlock::forgetSpell(std::string spell_name) {
-	if (_book.find(spell_name) != _book.end()) {
-		// delete _book.find(spell_name)->second;
-		_book.erase(spell_name);
-	}
-
-}
-void Warlock::launchSpell(std::string spell_name, ATarget const & target) {
-	if (_book.find(spell_name) != _book.end()) {
-		_book[spell_name]->launch(target);
-	}
-
-}
-

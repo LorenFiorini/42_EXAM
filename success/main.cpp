@@ -1,27 +1,62 @@
 
-#include "cpp_module00/Warlock.hpp"
+// #include "cpp_module00/Warlock.hpp"
 
-int main00()
+// int main00()
+// {
+// 	Warlock const richard("Richard", "Mistress of Magma");
+// 	richard.introduce();
+// 	std::cout << richard.getName() << " - " << richard.getTitle() << std::endl;
+
+// 	Warlock* jack = new Warlock("Jack", "the Long");
+// 	jack->introduce();
+// 	jack->setTitle("the Mighty");
+// 	jack->introduce();
+
+// 	delete jack;
+
+// 	return (0);
+// }
+
+/* ASpell.hpp ASpell.cpp ATarget.hpp ATarget.cpp Fwoosh.hpp Fwoosh.cpp Dummy.hpp Dummy.cpp
+ 
+cpp_module01/ASpell.cpp cpp_module01/ATarget.cpp cpp_module01/Fwoosh.cpp cpp_module01/Dummy.cpp cpp_module01/Warlock.cpp
+*/
+
+
+#include "cpp_module01/ASpell.hpp"
+#include "cpp_module01/ATarget.hpp"
+#include "cpp_module01/Fwoosh.hpp"
+#include "cpp_module01/Dummy.hpp"
+#include "cpp_module01/Warlock.hpp"
+
+int main01()
 {
-	Warlock const richard("Richard", "Mistress of Magma");
+	{
+		// ASpell a("Fwoosh", "fwooshed");
+		// ATarget b("ATarget");
+	}
+	
+	Warlock richard("Richard", "the Titled");
+
+	Dummy bob;
+	Fwoosh* fwoosh = new Fwoosh();
+
+	richard.learnSpell(fwoosh);
+
 	richard.introduce();
-	std::cout << richard.getName() << " - " << richard.getTitle() << std::endl;
+	richard.launchSpell("Fwoosh", bob);
 
-	Warlock* jack = new Warlock("Jack", "the Long");
-	jack->introduce();
-	jack->setTitle("the Mighty");
-	jack->introduce();
-
-	delete jack;
-
+	richard.forgetSpell("Fwoosh");
+	richard.launchSpell("Fwoosh", bob);
 	return (0);
+
 }
 
 
 
-
 int main() {
-	main00();
+	// main00();
+	main01();
 
 	return (0);
 }
