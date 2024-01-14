@@ -6,7 +6,7 @@
 #    By: jcluzet <jcluzet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/20 02:26:11 by jcluzet           #+#    #+#              #
-#    Updated: 2022/09/01 23:50:56 by jcluzet          ###   ########.fr        #
+#    Updated: 2022/09/01 23:52:05 by jcluzet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,12 @@ then
 fi
 
 cd .system/grading
-clang++ -Wall -Wextra -Werror -std=c++98 -o source $MAIN Warlock.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o source Warlock.cpp ASpell.cpp ATarget.cpp Dummy.cpp Fwoosh.cpp $MAIN
 ./source | cat -e > sourcexam       #TESTING
 rm source
 cd ../../rendu
 {
-clang++ -Wall -Wextra -Werror -std=c++98 -o final $MAIN1 cpp_module00/Warlock.cpp
+clang++ -Wall -Wextra -Werror -std=c++98 -o final cpp_module01/Warlock.cpp cpp_module01/ASpell.cpp cpp_module01/ATarget.cpp cpp_module01/Dummy.cpp cpp_module01/Fwoosh.cpp $MAIN1
 }  &>../.system/grading/traceback
 # if there is a traceback file, exit this script
 # if [ -e ../.system/grading/traceback ]
@@ -41,25 +41,23 @@ rm final
 }  &>/dev/null
 cd ../.system/grading
 DIFF=$(diff sourcexam finalexam)
-# echo "" >> traceback
+echo "" >> traceback
 if [ "$DIFF" != "" ]
 then
 		index=$(($index + 1))
-		echo "<-------------- OUR OUTPUT ------------>" >> traceback
-		cat finalexam >> traceback
-		# echo '\n' >> traceback
-		if [ "$(cat finalexam)" != "" ]
-		then
-		echo "<-------------- MUST BE : ------------>" >> traceback
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
 		cat sourcexam >> traceback
-		echo "<--------------    DIFF :   ------------>" >> traceback
-		# echo "DIFF : " >> traceback
-		echo "$DIFF" >> traceback
+		echo '\n' >> traceback
+		if [ -e finalexam ]
+		then
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>\n\n" >> traceback
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
+		cat finalexam >> traceback
 		else
-		echo "Compilation Error stop." >> traceback
-		printf "\nLittle reminder: Here you must have a Warlock.cpp & Warlock.hpp files." >> traceback
+		echo "" >> traceback
 		fi
-		# echo '\n' >> traceback
+		echo '\n' >> traceback
+		echo "<--------------~-~-~-~-~-~-~-~-~------------>" >> traceback
 fi
 rm finalexam
 

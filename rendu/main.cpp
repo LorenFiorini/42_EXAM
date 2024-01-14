@@ -1,8 +1,7 @@
 
 #include "cpp_module00/Warlock.hpp"
 
-
-int main()
+int main00()
 {
 	Warlock const richard("Richard", "Mistress of Magma");
 	richard.introduce();
@@ -18,7 +17,11 @@ int main()
 	return (0);
 }
 
-/*
-c++ -Wall -Wextra -Werror m0.cpp cpp_module00/Warlock.cpp
 
-*/
+
+
+int main() {
+	main00();
+
+	return (0);
+}
