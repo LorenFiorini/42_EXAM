@@ -39,29 +39,34 @@ void Warlock::setTitle(std::string const & title)  {
 	_title = title;
 }
 void Warlock::introduce() const {
-	std::cout << _name;
-	std::cout << ": I am ";
-	std::cout << _name;
-	std::cout << ", ";
-	std::cout << _title;
-	std::cout << "!";
-	std::cout << std::endl;
+	std::cout << _name << ": I am " << _name << ", " << _title << "!" << std::endl;
 }
 
 
+// void Warlock::learnSpell(ASpell *spell) {
+// 	std::string sn = spell->getName();
+// 	if (mp.find(sn) == mp.end()) {
+// 		mp[sn] = spell->clone();
+// 	}
+// }
+// void Warlock::forgetSpell(std::string sn) {
+// 	if (mp.find(sn) != mp.end()) {
+// 		mp.erase(sn);
+// 	}
+// }
+// void Warlock::launchSpell(std::string sn, ATarget const & target) {
+// 	if (mp.find(sn) != mp.end()) {
+// 		mp[sn]->launch(target);
+// 	}
+// }
 void Warlock::learnSpell(ASpell *spell) {
-	std::string sn = spell->getName();
-	if (mp.find(sn) == mp.end()) {
-		mp[sn] = spell->clone();
-	}
+	book.learnSpell(spell);
 }
 void Warlock::forgetSpell(std::string sn) {
-	if (mp.find(sn) != mp.end()) {
-		mp.erase(sn);
-	}
+	book.forgetSpell(sn);
 }
 void Warlock::launchSpell(std::string sn, ATarget const & target) {
-	if (mp.find(sn) != mp.end()) {
-		mp[sn]->launch(target);
+	if (book.mp.find(sn) != book.mp.end()) {
+		book.mp[sn]->launch(target);
 	}
 }
