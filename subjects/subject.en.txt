@@ -22,6 +22,8 @@ Create the following two spells, on the same model as Fwoosh:
 In addition to this, just so he won't have only dummy to attack, let's make a
 new target for him, which will be the BrickWall (Type: "Inconspicuous Red-brick Wall").
 
+
+
 Now, make a SpellBook class, in canonical form, that can't be copied or instantiated
 by copy. It will have the following functions:
 
