@@ -1,18 +1,19 @@
 
-
 #pragma once
-#include <iostream>
-#include <string>
-#include "ATarget.hpp"
 
+
+#include <string>
+#include <iostream>
+#include "ATarget.hpp"
 class ATarget;
 
 class ASpell {
 protected:
-	std::string _name;
-	std::string _effects;
+	std::string _na;
+	std::string _ef;
 
 	ASpell();
+
 public:
 	ASpell(ASpell const & obj);
 	ASpell& operator=(ASpell const & obj);
@@ -23,6 +24,7 @@ public:
 	std::string getEffects() const ;
 
 	virtual ASpell *clone() const = 0;
-	void launch(ATarget const & target);
+
+	void launch(ATarget const & target) const;
 };
 

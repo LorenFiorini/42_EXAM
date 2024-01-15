@@ -1,8 +1,8 @@
 
-
 #pragma once
-#include <iostream>
+
 #include <string>
+#include <iostream>
 #include "ASpell.hpp"
 
 class Fwoosh : public ASpell {
@@ -12,3 +12,4 @@ public:
 	Fwoosh *clone() const;
 };
 
+// ---------------------------

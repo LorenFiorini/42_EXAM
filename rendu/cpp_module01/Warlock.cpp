@@ -61,7 +61,7 @@ void Warlock::forgetSpell(std::string sn) {
 	}
 }
 void Warlock::launchSpell(std::string sn, ATarget const & target) {
-	if (mp.find(sn) == mp.end()) {
+	if (mp.find(sn) != mp.end()) {
 		mp[sn]->launch(target);
 	}
 }

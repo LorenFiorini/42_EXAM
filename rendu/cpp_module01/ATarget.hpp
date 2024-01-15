@@ -11,10 +11,10 @@ protected:
 	std::string _ty;
 
 	ATarget();
-	ATarget(ATarget const & obj);
-	ATarget& operator=(ATarget const & obj);
 
 public:
+	ATarget(ATarget const & obj);
+	ATarget& operator=(ATarget const & obj);
 	ATarget(std::string name);
 	virtual ~ATarget();
 

@@ -13,10 +13,10 @@ protected:
 	std::string _ef;
 
 	ASpell();
-	ASpell(ASpell const & obj);
-	ASpell& operator=(ASpell const & obj);
 
 public:
+	ASpell(ASpell const & obj);
+	ASpell& operator=(ASpell const & obj);
 	ASpell(std::string name, std::string effects);
 	virtual ~ASpell();
 
