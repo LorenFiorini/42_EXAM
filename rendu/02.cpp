@@ -12,60 +12,60 @@
 
 
 
-// int main()
-// {
-// 	Warlock richard("Richard", "foo");
-// 	richard.setTitle("Hello, I'm Richard the Warlock!");
-// 	BrickWall model1;
-
-// 	Polymorph* polymorph = new Polymorph();
-// 	TargetGenerator tarGen;
-
-// 	tarGen.learnTargetType(&model1);
-// 	richard.learnSpell(polymorph);
-
-// 	Fireball* fireball = new Fireball();
-
-// 	richard.learnSpell(fireball);
-
-// 	ATarget* wall = tarGen.createTarget("Inconspicuous Red-brick Wall");
-
-// 	richard.introduce();
-// 	richard.launchSpell("Polymorph", *wall);
-// 	richard.launchSpell("Fireball", *wall);
-
-// 	return 0;
-// }
-
 int main()
 {
-	Warlock richard("Richard", "the Titled");
+	Warlock richard("Richard", "foo");
+	richard.setTitle("Hello, I'm Richard the Warlock!");
+	BrickWall model1;
 
-	Dummy bob;
-	BrickWall bri;
+	Polymorph* polymorph = new Polymorph();
+	TargetGenerator tarGen;
 
-	Fwoosh* fwoosh = new Fwoosh();
-	richard.learnSpell(fwoosh);
+	tarGen.learnTargetType(&model1);
+	richard.learnSpell(polymorph);
+
+	Fireball* fireball = new Fireball();
+
+	richard.learnSpell(fireball);
+
+	ATarget* wall = tarGen.createTarget("Inconspicuous Red-brick Wall");
+
 	richard.introduce();
-	richard.launchSpell("Fwoosh", bob);
-	richard.forgetSpell("Fwoosh");
-	richard.launchSpell("Fwoosh", bob);
+	richard.launchSpell("Polymorph", *wall);
+	richard.launchSpell("Fireball", *wall);
 
-	Polymorph* poly = new Polymorph();
-	richard.learnSpell(poly);
-	richard.introduce();
-	richard.launchSpell("Polymorph", bri);
-	richard.forgetSpell("Polymorph");
-	richard.launchSpell("Polymorph", bri);
-
-	Fireball* fb = new Fireball();
-	richard.learnSpell(fb);
-	richard.introduce();
-	richard.launchSpell("Fireball", bri);
-	richard.forgetSpell("Fireball");
-	richard.launchSpell("Fireball", bri);
-	return (0);
+	return 0;
 }
+
+// int main()
+// {
+// 	Warlock richard("Richard", "the Titled");
+
+// 	Dummy bob;
+// 	BrickWall bri;
+
+// 	Fwoosh* fwoosh = new Fwoosh();
+// 	richard.learnSpell(fwoosh);
+// 	richard.introduce();
+// 	richard.launchSpell("Fwoosh", bob);
+// 	richard.forgetSpell("Fwoosh");
+// 	richard.launchSpell("Fwoosh", bob);
+
+// 	Polymorph* poly = new Polymorph();
+// 	richard.learnSpell(poly);
+// 	richard.introduce();
+// 	richard.launchSpell("Polymorph", bri);
+// 	richard.forgetSpell("Polymorph");
+// 	richard.launchSpell("Polymorph", bri);
+
+// 	Fireball* fb = new Fireball();
+// 	richard.learnSpell(fb);
+// 	richard.introduce();
+// 	richard.launchSpell("Fireball", bri);
+// 	richard.forgetSpell("Fireball");
+// 	richard.launchSpell("Fireball", bri);
+// 	return (0);
+// }
 
 /*
 c++ -Wall -Wextra -Werror 02.cpp cpp_module02/ASpell.cpp cpp_module02/ATarget.cpp cpp_module02/Fwoosh.cpp cpp_module02/Dummy.cpp cpp_module02/Warlock.cpp cpp_module02/Fireball.cpp cpp_module02/Polymorph.cpp cpp_module02/BrickWall.cpp cpp_module02/SpellBook.cpp cpp_module02/TargetGenerator.cpp
