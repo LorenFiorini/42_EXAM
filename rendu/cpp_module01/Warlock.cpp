@@ -47,3 +47,21 @@ void Warlock::introduce() const {
 	std::cout << "!";
 	std::cout << std::endl;
 }
+
+
+void Warlock::learnSpell(ASpell *spell) {
+	std::string sn = spell->getName();
+	if (mp.find(sn) == mp.end()) {
+		mp[sn] = spell->clone();
+	}
+}
+void Warlock::forgetSpell(std::string sn) {
+	if (mp.find(sn) != mp.end()) {
+		mp.erase(sn);
+	}
+}
+void Warlock::launchSpell(std::string sn, ATarget const & target) {
+	if (mp.find(sn) == mp.end()) {
+		mp[sn]->launch(target);
+	}
+}
