@@ -1,16 +1,15 @@
 
-
 #pragma once
 
 #include <string>
 #include <iostream>
 #include "ASpell.hpp"
 
-class Fireball : public ASpell {
+class Fwoosh : public ASpell {
 public:
-	Fireball();
-	~Fireball();
-	Fireball *clone() const;
+	Fwoosh();
+	~Fwoosh();
+	Fwoosh *clone() const;
 };
 
 // ---------------------------
