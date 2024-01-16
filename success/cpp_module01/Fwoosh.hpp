@@ -1,15 +1,19 @@
 
 #pragma once
 
-#include <string>
 #include <iostream>
+#include <string>
+
 #include "ASpell.hpp"
+
 
 class Fwoosh : public ASpell {
 public:
-	Fwoosh();
+	Fwoosh(void);
 	~Fwoosh();
-	Fwoosh *clone() const;
+
+	Fwoosh * clone() const;
 };
 
-// ---------------------------
+
+/* ---------------------------- */

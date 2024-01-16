@@ -1,17 +1,20 @@
 
 #include "Fwoosh.hpp"
 
-Fwoosh::Fwoosh() {
-	// std::cout << std::endl;
-	_na = "Fwoosh";
-	_ef = "fwooshed";
-}
-Fwoosh::~Fwoosh() {
-	// std::cout << std::endl;
+/*
+	std::cout << "Constructor" << std::endl;
+	std::cout << "Destructor" << std::endl;
+*/
+
+
+Fwoosh::Fwoosh(void) : ASpell("Fwoosh", "fwooshed!") {
 }
 
-Fwoosh *Fwoosh::clone() const {
-	Fwoosh *ans;
-	ans = new Fwoosh(*this);
-	return (ans);
+Fwoosh::~Fwoosh() {
 }
+
+Fwoosh * Fwoosh::clone() const {
+	Fwoosh *ans = new Fwoosh(*this);
+	return ans;
+}
+

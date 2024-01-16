@@ -1,17 +1,20 @@
 
-
 #include "Dummy.hpp"
 
-Dummy::Dummy() {
-	// std::cout << std::endl;
-	_ty = "Target Practice Dummy";
-}
-Dummy::~Dummy() {
-	// std::cout << std::endl;
+/*
+	std::cout << "Constructor" << std::endl;
+	std::cout << "Destructor" << std::endl;
+*/
+
+
+Dummy::Dummy(void) : ATarget("Target Practice Dummy") {
 }
 
-Dummy *Dummy::clone() const {
-	Dummy *ans;
-	ans = new Dummy(*this);
-	return (ans);
+Dummy::~Dummy() {
 }
+
+Dummy * Dummy::clone() const {
+	Dummy *ans = new Dummy(*this);
+	return ans;
+}
+

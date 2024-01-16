@@ -1,14 +1,19 @@
+
 #pragma once
 
-#include <string>
 #include <iostream>
+#include <string>
+
 #include "ATarget.hpp"
+
 
 class Dummy : public ATarget {
 public:
-	Dummy();
+	Dummy(void);
 	~Dummy();
-	Dummy *clone() const;
+
+	Dummy * clone() const;
 };
 
-// ---------------------------
+
+/* ---------------------------- */

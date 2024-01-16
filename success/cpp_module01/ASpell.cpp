@@ -1,31 +1,39 @@
 
 #include "ASpell.hpp"
 
-ASpell::ASpell() {
+/*
+	std::cout << "Constructor" << std::endl;
+	std::cout << "Destructor" << std::endl;
+*/
+
+
+ASpell::ASpell(void) {
 }
 ASpell::ASpell(ASpell const & obj) {
 	*this = obj;
 }
 ASpell& ASpell::operator=(ASpell const & obj) {
-	_na = obj._na;
-	_ef = obj._ef;
+	if (this != &obj) {
+		this->na = obj.na;
+		this->ef = obj.ef;
+	}
 	return (*this);
 }
 ASpell::~ASpell() {
 }
 
-// ---------------------------
 
-ASpell::ASpell(std::string name, std::string effects)
-	: _na(name), _ef(effects) {
+/* 4 + .*/
+ASpell::ASpell(std::string name, std::string effects) : na(name), ef(effects) {
 }
 
-std::string ASpell::getName() const {
-	return (_na);
+std::string ASpell::getName(void) const {
+	return na;
 }
-std::string ASpell::getEffects() const {
-	return (_ef);
+std::string ASpell::getEffects(void) const {
+	return ef;
 }
+
 
 void ASpell::launch(ATarget const & target) const {
 	target.getHitBySpell(*this);

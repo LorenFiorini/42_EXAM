@@ -24,7 +24,7 @@ ASpell::~ASpell() {
 
 
 /* 4 + .*/
-ASpell::ASpell(std::string name, std::string ef) : na(name), ef(ef) {
+ASpell::ASpell(std::string name, std::string effects) : na(name), ef(effects) {
 }
 
 std::string ASpell::getName(void) const {
