@@ -3,19 +3,11 @@
 
 #include <iostream>
 #include <string>
-#include <map>
-#include "ASpell.hpp"
-#include "ATarget.hpp"
-#include "SpellBook.hpp"
-#include "TargetGenerator.hpp"
-
 
 class Warlock {
 private:
 	std::string na;
 	std::string ti;
-	std::map< std::string , ASpell * > mp;
-	SpellBook book;
 
 	Warlock(void);
 	Warlock(Warlock const & obj);
@@ -29,9 +21,7 @@ public:
 	std::string const & getTitle(void) const;
 	void setTitle(std::string const & title);
 	void introduce() const;
-
-	void learnSpell(ASpell * spell) ;
-	void forgetSpell(std::string sn) ;
-	void launchSpell(std::string sn, ATarget const & target) ;
 };
 
+
+/* ---------------------------- */

@@ -53,11 +53,10 @@ void Warlock::introduce() const {
 
 
 void Warlock::learnSpell(ASpell * spell) {
-	// std::string sn = spell->getName();
-	// if (mp.find(sn) == mp.end()) {
-	// 	mp[sn] = spell->clone();
-	// }
-	this->book.learnSpell(spell);
+	std::string sn = spell->getName();
+	if (mp.find(sn) == mp.end()) {
+		mp[sn] = spell->clone();
+	}
 }
 void Warlock::forgetSpell(std::string sn) {
 	if (mp.find(sn) != mp.end()) {
@@ -65,10 +64,7 @@ void Warlock::forgetSpell(std::string sn) {
 	}
 }
 void Warlock::launchSpell(std::string sn, ATarget const & target) {
-	if (book.mp.find(sn) != book.mp.end()) {
-		book.mp[sn]->launch(target);
+	if (mp.find(sn) != mp.end()) {
+		mp[sn]->launch(target);
 	}
-	// (void) sn;
-	// (void) target;
-
 }

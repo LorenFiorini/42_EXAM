@@ -1,7 +1,4 @@
 
-/* ---------------------------- */
-
-
 #include "Warlock.hpp"
 
 /*
@@ -16,11 +13,8 @@ Warlock::Warlock(Warlock const & obj) {
 	*this = obj;
 }
 Warlock& Warlock::operator=(Warlock const & obj) {
-	if (this != &obj) {
-		this->na = obj.na;
-		this->ti = obj.ti;
-		this->mp = obj.mp;
-	}
+	if (this == &obj)
+		return (*this);
 	return (*this);
 }
 Warlock::~Warlock() {
@@ -49,26 +43,4 @@ void Warlock::introduce() const {
 	std::cout << na << ": I am ";
 	std::cout << na << ", ";
 	std::cout << ti << "!" << std::endl;
-}
-
-
-void Warlock::learnSpell(ASpell * spell) {
-	// std::string sn = spell->getName();
-	// if (mp.find(sn) == mp.end()) {
-	// 	mp[sn] = spell->clone();
-	// }
-	this->book.learnSpell(spell);
-}
-void Warlock::forgetSpell(std::string sn) {
-	if (mp.find(sn) != mp.end()) {
-		mp.erase(sn);
-	}
-}
-void Warlock::launchSpell(std::string sn, ATarget const & target) {
-	if (book.mp.find(sn) != book.mp.end()) {
-		book.mp[sn]->launch(target);
-	}
-	// (void) sn;
-	// (void) target;
-
 }

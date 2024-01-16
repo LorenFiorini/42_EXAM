@@ -1,9 +1,9 @@
 
 #pragma once
 
-#include <map>
-#include <string>
 #include <iostream>
+#include <string>
+#include <map>
 #include "ASpell.hpp"
 #include "ATarget.hpp"
 
@@ -13,13 +13,14 @@ private:
 	SpellBook& operator=(SpellBook const & obj);
 
 public:
-	SpellBook();
+	SpellBook(void);
 	~SpellBook();
+	std::map< std::string , ASpell * > mp;
 
-	std::map<std::string, ASpell *> mp;
-	void learnSpell(ASpell* spell);
+	void learnSpell(ASpell * spell);
 	void forgetSpell(std::string const & sn);
 	ASpell* createSpell(std::string const & sn);
 };
 
-// ---------------------------
+
+/* ---------------------------- */

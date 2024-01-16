@@ -6,8 +6,6 @@
 #include <map>
 #include "ASpell.hpp"
 #include "ATarget.hpp"
-#include "SpellBook.hpp"
-#include "TargetGenerator.hpp"
 
 
 class Warlock {
@@ -15,7 +13,6 @@ private:
 	std::string na;
 	std::string ti;
 	std::map< std::string , ASpell * > mp;
-	SpellBook book;
 
 	Warlock(void);
 	Warlock(Warlock const & obj);
