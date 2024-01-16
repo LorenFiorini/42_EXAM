@@ -1,5 +1,11 @@
 
+
 #include "cpp_module00/Warlock.hpp"
+
+/*
+c++ -Wall -Wextra -Werror m0.cpp cpp_module00/Warlock.hpp
+
+*/
 
 
 int main()
@@ -7,19 +13,10 @@ int main()
 	Warlock const richard("Richard", "Mistress of Magma");
 	richard.introduce();
 	std::cout << richard.getName() << " - " << richard.getTitle() << std::endl;
-
 	Warlock* jack = new Warlock("Jack", "the Long");
 	jack->introduce();
 	jack->setTitle("the Mighty");
 	jack->introduce();
-
 	delete jack;
-
 	return (0);
 }
-
-/*
-
-c++ -Wall -Wextra -Werror 00.cpp cpp_module00/Warlock.cpp
-
-*/

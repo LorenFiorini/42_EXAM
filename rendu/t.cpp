@@ -1,9 +1,8 @@
 
 #pragma once
 
-
-#include <string>
 #include <iostream>
+#include <string>
 
 class T {
 private:
@@ -11,31 +10,35 @@ private:
 protected:
 
 public:
-	T();
+	T(void);
 	T(T const & obj);
 	T& operator=(T const & obj);
 	~T();
-
 };
 
-// ---------------------------
+
+/* ---------------------------- */
 
 #include "T.hpp"
 
-T::T() {
-	// std::cout << std::endl;
+/*
+	std::cout << "Constructor" << std::endl;
+	std::cout << "Destructor" << std::endl;
+*/
+
+
+T::T(void) {
 }
 T::T(T const & obj) {
-	// std::cout << std::endl;
 	*this = obj;
 }
 T& T::operator=(T const & obj) {
-	// std::cout << std::endl;
+	if (this == &obj)
+		return (*this);
 	return (*this);
 }
 T::~T() {
-	// std::cout << std::endl;
 }
 
-// ---------------------------
 
+/* 4 + .*/
