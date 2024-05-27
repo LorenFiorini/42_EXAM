@@ -1,19 +1,67 @@
 
-#include <unistd.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <sys/socket.h>
 
-void ft_putstr_fd(char *str, int fd)
-{
-	write(fd, str, strlen(str));
-}
+#define WRONG_NB_ARGS "Wrong number of arguments\n"
+#define FATAL_ERROR "Fatal error\n"
 
-int main(int argc, char **argv) {
+
+typedef struct s_client {
+	int					fd;
+	char				buffer[4096];
+	struct sockaddr_in	addr;
+} t_client;
+
+
+/* Global variables */
+
+// fd_set		except_set, master_set;
+fd_set		read_set;
+fd_set		write_set;
+fd_set		current;
+t_client	clients[1024];
+char		send_buffer[4096];
+char		recv_buffer[4096];
+
+
+/* Main */
+
+int main(int argc, char ** argv) {
 	if (argc != 2) {
-		ft_putstr_fd("Wrong number of arguments\n", 2);
-		return (1);
+		write(2, WRONG_NB_ARGS, strlen(WRONG_NB_ARGS));
+		return 1;
 	}
 
-	return (0);
+	struct sockaddr_in addr;
+	int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	if (sockfd == -1) {
+		write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+		return 1;
+	}
+
+	int max_fd = sockfd;
+
+	addr.sin_family = AF_INET;
+	addr.sin_port = htons(atoi(argv[1]));
+	addr.sin_addr.s_addr = htonl(INADDR_ANY);
+
+	if (bind(sockfd, (struct sockaddr *)&addr, sizeof(addr)) == -1) {
+		write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+		return 1;
+	}
+	if (listen(sockfd, 42) == -1) {
+		write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+		return 1;
+	}
+
+	FD_ZERO(&current);
+	FD_SET(sockfd, &current);
+	bzero(&addr, sizeof(addr));
+	bzero(&read_set, sizeof(read_set));
+	while (1) {
+		read_set = write_set = current;
+	}
 }
