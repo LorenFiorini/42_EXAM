@@ -1,0 +1,21 @@
+../../rendu/mini_serv/mini_serv.c:15:21: error: field has incomplete type 'struct sockaddr_in'
+        struct sockaddr_in      addr;
+                                ^
+../../rendu/mini_serv/mini_serv.c:15:9: note: forward declaration of 'struct sockaddr_in'
+        struct sockaddr_in      addr;
+               ^
+../../rendu/mini_serv/mini_serv.c:38:21: error: variable has incomplete type 'struct sockaddr_in'
+        struct sockaddr_in addr;
+                           ^
+../../rendu/mini_serv/mini_serv.c:15:9: note: forward declaration of 'struct sockaddr_in'
+        struct sockaddr_in      addr;
+               ^
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+        addr.sin_addr.s_addr = htonl(INADDR_ANY);
+                                     ^
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+../../rendu/mini_serv/mini_serv.c:49:31: error: use of undeclared identifier 'INADDR_ANY'
+8 errors generated.

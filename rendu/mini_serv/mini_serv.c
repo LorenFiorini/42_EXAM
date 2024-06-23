@@ -63,5 +63,43 @@ int main(int argc, char ** argv) {
 	bzero(&read_set, sizeof(read_set));
 	while (1) {
 		read_set = write_set = current;
+
+		if (select(max_fd + 1, &read_set, &write_set, NULL, NULL) == -1) {
+			write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+			return 1;
+		}
+		for (int i = 0; i <= max_fd; i++) {
+			if (FD_ISSET(i, &read_set)) {
+				if (i == sockfd) {
+					int new_fd = accept(sockfd, (struct sockaddr *)&addr, (socklen_t *)&addr);
+					if (new_fd == -1) {
+						write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+						return 1;
+					}
+					if (new_fd > max_fd) {
+						max_fd = new_fd;
+					}
+					FD_SET(new_fd, &current);
+				} else {
+					int ret = read(i, recv_buffer, 4096);
+					if (ret == -1) {
+						write(2, FATAL_ERROR, strlen(FATAL_ERROR));
+						return 1;
+					}
+					if (ret == 0) {
+						close(i);
+						FD_CLR(i, &current);
+					} else {
+						for (int j = 0; j <= max_fd; j++) {
+							if (FD_ISSET(j, &current) && j != sockfd && j != i) {
+								write(j, recv_buffer, ret);
+							}
+						}
+						break;
+					}
+				}
+			}
+		}
 	}
+	return 0;
 }
