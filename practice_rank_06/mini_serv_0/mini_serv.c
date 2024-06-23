@@ -5,23 +5,26 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#define MAX_CLIENTS 1024
-#define BUFFER_SIZE 120000
-
 typedef struct s_client {
     int     id;
-    char    msg[BUFFER_SIZE];
+    char    msg[100000];
 }   t_client;
 
+t_client    clients[1024];
+fd_set      read_set;
+fd_set      write_set;
+fd_set      current;
+char        send_buffer[120000];
+char        recv_buffer[120000];
 
 void serv_error(char  *msg) {
     write(2, msg, strlen(msg));
     exit(1);
 }
 
-void send_to_all(int except_fd, int mxfd, char *send_buffer, fd_set write_set) {
+void send_to_all(int except, int mxfd) {
     for (int fd = 0; fd <= mxfd; fd++) {
-        if (FD_ISSET(fd, &write_set) && fd != except_fd) {
+        if (FD_ISSET(fd, &write_set) && fd != except) {
             if (send(fd, send_buffer, strlen(send_buffer), 0) == -1) {
                 serv_error("Fatal error\n");
             }
@@ -35,18 +38,13 @@ int     main(int argc, char **argv) {
     int                 serverfd;
     int                 mxfd;
     int                 gid = 0;
-    t_client            clients[MAX_CLIENTS];
-    fd_set              read_set;
-    fd_set              write_set;
-    fd_set              current;
-    char                send_buffer[BUFFER_SIZE];
-    char                recv_buffer[BUFFER_SIZE];
 
     if (argc != 2) {
         serv_error("Wrong number of arguments\n");
     }
 
     serverfd = socket(AF_INET, SOCK_STREAM, 0);
+    mxfd = serverfd;
     if (serverfd == -1) {
         serv_error("Fatal error\n");
     }
@@ -64,10 +62,8 @@ int     main(int argc, char **argv) {
         serv_error("Fatal error\n");
     }
 
-    mxfd = serverfd;
     while (1) {
-        read_set = current;
-        write_set = current;
+        read_set = write_set = current;
         if (select(mxfd + 1, &read_set, &write_set, 0, 0) == -1) {
             continue;
         }
@@ -85,12 +81,12 @@ int     main(int argc, char **argv) {
                     clients[clientfd].id = gid++;
                     FD_SET(clientfd, &current);
                     sprintf(send_buffer, "server: client %d just arrived\n", clients[clientfd].id);
-                    send_to_all(clientfd, mxfd, send_buffer, write_set);
+                    send_to_all(clientfd, mxfd);
                 } else {
                     int ret = recv(fd, recv_buffer, sizeof(recv_buffer), 0);
                     if (ret <= 0) {
                         sprintf(send_buffer, "server: client %d just left\n", clients[fd].id);
-                        send_to_all(fd, mxfd, send_buffer, write_set);
+                        send_to_all(fd, mxfd);
                         FD_CLR(fd, &current);
                         close(fd);
                     } else {
@@ -99,7 +95,7 @@ int     main(int argc, char **argv) {
                             if (clients[fd].msg[j] == '\n') {
                                 clients[fd].msg[j] = '\0';
                                 sprintf(send_buffer, "client %d: %s\n", clients[fd].id, clients[fd].msg);
-                                send_to_all(fd, mxfd, send_buffer, write_set);
+                                send_to_all(fd, mxfd);
                                 bzero(clients[fd].msg, strlen(clients[fd].msg));
                                 j = -1;
                             }
@@ -110,6 +106,5 @@ int     main(int argc, char **argv) {
             }
         }
     }
-    
     return (0);
 }
