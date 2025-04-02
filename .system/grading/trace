@@ -1,0 +1,4 @@
+../../rendu/mini_serv/mini_serv.c:24:9: error: expected identifier or '('
+   24 | void    
+      |         ^
+1 error generated.
