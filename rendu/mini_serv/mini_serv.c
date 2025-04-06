@@ -57,10 +57,14 @@ int main(int argc, char **argv) {
         Specifies TCP (Transmission Control Protocol)
     0
         to automatically choose the protocol based on the socket type */
-
+    if (servfd == -1) {
+        error_exit(NULL);
+    }
     FD_ZERO(&readfds);
     FD_ZERO(&writefds);
     FD_ZERO(&curfds);
+
+    FD_SET(servfd, curfds);
 
 
     return 0;
