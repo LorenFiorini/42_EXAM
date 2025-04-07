@@ -49,23 +49,30 @@ int main(int argc, char **argv) {
     socklen_t           len;
 
     servfd = socket(AF_INET, SOCK_STREAM, 0);
-/*  socket(domain, type, protocol);
-        it creates a socket and returns its file descriptor 
+    /* 
+    socket(domain, type, protocol);
+      it creates a socket and returns its file descriptor 
     AF_INET
-        address family IPV4
+      address family IPV4
     SOCK_STREAM
-        Specifies TCP (Transmission Control Protocol)
+      Specifies TCP (Transmission Control Protocol)
     0
-        to automatically choose the protocol based on the socket type */
+      to automatically choose the protocol based on the socket type
+    */
     if (servfd == -1) {
         error_exit(NULL);
     }
-    FD_ZERO(&readfds);
-    FD_ZERO(&writefds);
-    FD_ZERO(&curfds);
 
+    FD_ZERO(&curfds);
     FD_SET(servfd, curfds);
 
+    bzero(clients, sizeof(clients));
+    bzero(&serveraddr, sizeof(serveraddr));
 
-    return 0;
+    serveraddr.sin_family = AF_INET;
+    serveraddr.sin_port  = htons(atoi(argv[1]));
+    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
+    /* INADDR_ANY: A constant that tells the server to bind to any available network interface */
+
+    return (0);
 }
