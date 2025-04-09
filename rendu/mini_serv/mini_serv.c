@@ -11,10 +11,10 @@
 /*  strlen, bzero */
 
 #include <sys/socket.h>
-/*  socket */
+/*  socket, bind, listen */
 
 #include <netinet/in.h>
-/* Internet address family */
+/* htonl */
 
 /* Macros */
 
@@ -74,5 +74,11 @@ int main(int argc, char **argv) {
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
     /* INADDR_ANY: A constant that tells the server to bind to any available network interface */
 
+    if (bind(serverfd,(const struct sockaddr_in *) &serveraddr, sizeof(serveraddr)) == -1) {
+        error_exit(NULL);
+    }
+    if (listen(servfd, 100) == -1) {
+        error_exit(NULL);
+    }
     return (0);
 }
