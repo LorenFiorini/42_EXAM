@@ -62,6 +62,7 @@ int main(int argc, char **argv) {
     if (servfd == -1) {
         error_exit(NULL);
     }
+    maxfd = servfd;
 
     FD_ZERO(&curfds);
     FD_SET(servfd, curfds);
@@ -74,11 +75,18 @@ int main(int argc, char **argv) {
     serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
     /* INADDR_ANY: A constant that tells the server to bind to any available network interface */
 
-    if (bind(serverfd,(const struct sockaddr_in *) &serveraddr, sizeof(serveraddr)) == -1) {
+    if (bind(servfd,(const struct sockaddr_in *) &serveraddr, sizeof(serveraddr)) == -1) {
         error_exit(NULL);
     }
+    /* int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); */
     if (listen(servfd, 100) == -1) {
         error_exit(NULL);
+    }
+    /* int listen(int socket, int backlog); */
+
+    while (1) {
+        readfds = writefds = curfds;
+        if (select(maxfd + 1, &))
     }
     return (0);
 }
