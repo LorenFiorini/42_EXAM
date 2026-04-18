@@ -1,113 +1,100 @@
+#include <string.h>
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 
 typedef struct s_client {
-    int     id;
-    char    msg[300000];
-}   t_client;
+    int id;
+    char msg[300000];
+} t_client;
 
-
-
-void    err(char  *msg)
-{
-    if (msg)
-        write(2, msg, strlen(msg));
-    else
-        write(2, "Fatal error", strlen("Fatal error"));
-    write(2, "\n", 1);
+void error_exit(char *str) {
+    if (!str) {
+        str = "Fatal error\n";
+    }
+    write(2, str, strlen(str));
     exit(1);
 }
 
-void    send_to_all(int except, int maxfd, fd_set write_set, char *send_buffer)
-{
-    for (int fd = 0; fd <= maxfd; fd++) {
-        if  (FD_ISSET(fd, &write_set) && fd != except) {
-            if (send(fd, send_buffer, strlen(send_buffer), 0) == -1) {
-                err(NULL);
-			}
-		}
+void send_broadcast(int except, int mxfd, char *buf, fd_set wst) {
+    for (int fd = 0; fd <= mxfd; fd++) {
+        if (FD_ISSET(fd, &wst) && fd != except) {
+            if (send(fd, buf, sizeof(buf), 0) == -1) {
+                error_exit(NULL);
+            }
+        }
     }
 }
 
-int     main(int argc, char **argv)
-{
-	t_client			clients[1024];
-	fd_set		        read_set, write_set, current;
-	int         		maxfd = 0, gid = 0, serverfd = 0;
-	char        		send_buffer[300000], recv_buffer[300000];
-    struct sockaddr_in  serveraddr;
-    socklen_t           len;
-
-
+int main(int argc, char ** argv) {
     if (argc != 2) {
-        err("Wrong number of arguments");
-	}
-	serverfd = socket(AF_INET, SOCK_STREAM, 0);
+        error_exit("Wrong number of arguments\n");
+    }
+    t_client    clients[1024];
+    fd_set      rst, wst, cur;
+    char        sendbuf[300000], recvbuf[300000];
+    struct sockaddr_in address;
+    socklen_t       len = sizeof(address);
+
+    int serverfd = socket(PF_INET, SOCK_STREAM, 0);
     if (serverfd == -1) {
-		err(NULL);
-	}
+        error_exit(NULL);
+    }
+    int mxfd = serverfd, gid = 0;
 
-    FD_ZERO(&current);
-    FD_SET(serverfd, &current);
+    FD_ZERO(&cur);
+    FD_SET(serverfd, &cur);
     bzero(clients, sizeof(clients));
-    bzero(&serveraddr, sizeof(serveraddr));
+    bzero(&address, sizeof(address));
+    address.sin_family = PF_INET;
+    address.sin_addr.s_addr = htonl(0);
+    address.sin_port = ntohs(atoi(argv[1]));
 
-    serveraddr.sin_family = AF_INET;
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serveraddr.sin_port = htons(atoi(argv[1]));
+    if (bind(serverfd, (const struct sockaddr *) &address, len) == -1) error_exit(NULL);
+    if (listen(serverfd, 1) == -1) error_exit(NULL);
 
-    if (bind(serverfd, (const struct sockaddr *)&serveraddr, sizeof(serveraddr)) == -1 || listen(serverfd, 100) == -1) {
-        err(NULL);
-	}
-
-    maxfd = serverfd;
     while (1) {
-        read_set = write_set = current;
-        if (select(maxfd + 1, &read_set, &write_set, 0, 0) == -1) continue;
-
-        for (int fd = 0; fd <= maxfd; fd++) {
-            if (FD_ISSET(fd, &read_set)) {
+        rst = wst = cur;
+        if (select(mxfd + 1, &rst, &wst, NULL, NULL) < 0) {
+            error_exit(NULL);
+        }
+        for (int fd = 0; fd <= mxfd; fd++) {
+            if (FD_ISSET(fd, &rst)) {
                 if (fd == serverfd) {
-                    int clientfd = accept(serverfd, (struct sockaddr *)&serveraddr, &len);
-
-                    if (clientfd == -1) {
-						continue;
-					} else if (clientfd > maxfd) {
-						maxfd = clientfd;
-					}
-                    clients[clientfd].id = gid++;
-                    FD_SET(clientfd, &current);
-                    sprintf(send_buffer, "server: client %d just arrived\n", clients[clientfd].id);
-                    send_to_all(clientfd, maxfd, current, send_buffer);
+                    int clientfd = accept(serverfd, (struct sockaddr *)& address, &len);
+                    if (clientfd < 0) continue;
+                    if (mxfd < clientfd) mxfd = clientfd;
+                    clients[clientfd].id = gid; gid++;
+                    FD_SET(clientfd, &cur);
+                    sprintf(sendbuf, "server: client %d just arrived\n", clients[clientfd].id);
+                    send_broadcast(clientfd, mxfd, sendbuf, cur);
                 } else {
-                    int ret = recv(fd, recv_buffer, sizeof(recv_buffer), 0);
-                    if (ret <= 0) {
-                        sprintf(send_buffer, "server: client %d just left\n", clients[fd].id);
-                        send_to_all(fd, maxfd, current, send_buffer);
-                        FD_CLR(fd, &current);
-                        close(fd);
-                        bzero(clients[fd].msg, strlen(clients[fd].msg));
-                    } else {
-                        for (int i = 0, j = strlen(clients[fd].msg); i < ret; i++, j++) {
-                            clients[fd].msg[j] = recv_buffer[i];
+                    int ret = recv(fd, recvbuf, sizeof(recvbuf), 0);
+                    if (ret >= 0) {
+                        int j = strlen(clients[fd].msg);
+                        for (int i = 0; i < ret; i++, j++) {
+                            clients[fd].msg[j] = recvbuf[i];
                             if (clients[fd].msg[j] == '\n') {
                                 clients[fd].msg[j] = '\0';
-                                sprintf(send_buffer, "client %d: %s\n", clients[fd].id, clients[fd].msg);
-                                send_to_all(fd, maxfd, current, send_buffer);
-                                bzero(clients[fd].msg, strlen(clients[fd].msg));
+                                sprintf(sendbuf, "client %d: %s", clients[fd].id, clients[fd].msg);
+                                send_broadcast(fd, mxfd, sendbuf, cur);
                                 j = -1;
                             }
                         }
+                    } else {
+                        sprintf(sendbuf, "server: client %d just left\n", clients[fd].id);
+                        send_broadcast(fd, mxfd, sendbuf, cur);
+                        FD_CLR(fd, &cur);
+                        close(fd);
+                        bzero(clients[fd].msg, sizeof(clients[fd].msg));
                     }
                 }
                 break;
             }
         }
     }
-    return (0);
+    
+    return 0;
 }
-

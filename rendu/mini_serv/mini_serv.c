@@ -1,92 +1,105 @@
-#include <stdio.h>
-/*   */
-
-#include <stdlib.h>
-/*  atoi */
-
-#include <unistd.h>
-/*  write, close, select */
-
 #include <string.h>
-/*  strlen, bzero */
-
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <sys/socket.h>
-/*  socket, bind, listen */
-
 #include <netinet/in.h>
-/* htonl */
 
-/* Macros */
-
-# define MX_BUF 300000
-
-
-/*  */
-
+const int BUF_SIZE = 4096 * 8;
 typedef struct s_client {
-    int     id;
-    char    msg[MX_BUF];
-}   t_client;
+    int id;
+    char msg[BUF_SIZE];
+} t_client;
+
+t_client    clients[1024];
+struct sockaddr_in address;
+socklen_t       len = sizeof(address);
+fd_set      rst, wst, cur;
 
 
-void    error_exit(char *msg) {
-    if (!msg) {
-        msg = "Fatal error\n";
+void error_exit(char *str) {
+    if (!str) {
+        str = "Fatal error\n";
     }
-    write(1, msg, strlen(msg));
+    write(2, str, strlen(str));
     exit(1);
 }
 
-int main(int argc, char **argv) {
+void send_broadcast(int except, int mxfd, char *buf, fd_set wst) {
+    for (int fd = 0; fd <= mxfd; fd++) {
+        if (FD_ISSET(fd, &wst) && fd != except) {
+            if (send(fd, buf, strlen(buf), 0) == -1) {
+                error_exit(NULL);
+            }
+        }
+    }
+}
+
+int main(int argc, char ** argv) {
     if (argc != 2) {
         error_exit("Wrong number of arguments\n");
     }
-    t_client clients[1024];
-    fd_set  readfds, writefds, curfds;
-    char    send_buf[MX_BUF], recv_buf[MX_BUF];
-    int     mxfd = 0, gid = 0, servfd = 0;
-    struct sockaddr_in  serveraddr;
-    socklen_t           len;
+    char        sendbuf[BUF_SIZE];
+    char        recvbuf[BUF_SIZE];
 
-    servfd = socket(AF_INET, SOCK_STREAM, 0);
-    /* 
-    socket(domain, type, protocol);
-      it creates a socket and returns its file descriptor 
-    AF_INET
-      address family IPV4
-    SOCK_STREAM
-      Specifies TCP (Transmission Control Protocol)
-    0
-      to automatically choose the protocol based on the socket type
-    */
-    if (servfd == -1) {
+    int serverfd = socket(PF_INET, SOCK_STREAM, 0);
+    if (serverfd == -1) {
         error_exit(NULL);
     }
-    maxfd = servfd;
+    int mxfd = serverfd, gid = 0;
 
-    FD_ZERO(&curfds);
-    FD_SET(servfd, curfds);
-
+    FD_ZERO(&cur);
+    FD_SET(serverfd, &cur);
     bzero(clients, sizeof(clients));
-    bzero(&serveraddr, sizeof(serveraddr));
+    bzero(&address, sizeof(address));
+    address.sin_family = PF_INET;
+    address.sin_addr.s_addr = htonl(2130706433);
+    address.sin_port = htons(atoi(argv[1]));
 
-    serveraddr.sin_family = AF_INET;
-    serveraddr.sin_port  = htons(atoi(argv[1]));
-    serveraddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    /* INADDR_ANY: A constant that tells the server to bind to any available network interface */
+    if (bind(serverfd, (const struct sockaddr *) &address, len) == -1) error_exit(NULL);
+    if (listen(serverfd, 1) == -1) error_exit(NULL);
 
-    if (bind(servfd,(const struct sockaddr_in *) &serveraddr, sizeof(serveraddr)) == -1) {
-        error_exit(NULL);
-    }
-    /* int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen); */
-    if (listen(servfd, 100) == -1) {
-        error_exit(NULL);
-    }
-    /* int listen(int socket, int backlog); */
-
+        rst = wst = cur;
     while (1) {
-        readfds = writefds = curfds;
-        if (select(maxfd + 1, &))
+        rst = cur;
+        if (select(mxfd + 1, &rst, &wst, NULL, NULL) < 0) {
+            error_exit(NULL);
+        }
+        for (int fd = 0; fd <= mxfd; fd++) {
+            if (FD_ISSET(fd, &rst)) {
+                if (fd == serverfd) {
+                    int clientfd = accept(serverfd, (struct sockaddr *)& address, &len);
+                    if (clientfd < 0) continue;
+                    if (mxfd < clientfd) mxfd = clientfd;
+                    clients[clientfd].id = gid; gid++;
+                    FD_SET(clientfd, &cur);
+                    sprintf(sendbuf, "server: client %d just arrived\n", clients[clientfd].id);
+                    send_broadcast(clientfd, mxfd, sendbuf, cur);
+                } else {
+                    int ret = recv(fd, recvbuf, sizeof(recvbuf), 0);
+                    if (ret > 0) {
+                        int j = strlen(clients[fd].msg);
+                        for (int i = 0; i < ret; i++, j++) {
+                            clients[fd].msg[j] = recvbuf[i];
+                            if (clients[fd].msg[j] == '\n') {
+                                clients[fd].msg[j] = '\0';
+                                sprintf(sendbuf, "client %d: %s", clients[fd].id, clients[fd].msg);
+                                send_broadcast(fd, mxfd, sendbuf, cur);
+                                j = -1;
+                            }
+                        }
+                    } else {
+                        sprintf(sendbuf, "server: client %d just left\n", clients[fd].id);
+                        send_broadcast(fd, mxfd, sendbuf, cur);
+                        FD_CLR(fd, &cur);
+                        close(fd);
+                        bzero(clients[fd].msg, sizeof(clients[fd].msg));
+                    }
+                }
+                break;
+            }
+        }
     }
-    return (0);
+    
+    return 0;
 }
